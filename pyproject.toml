@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "car-model-classification"
+version = "0.1.0"
+description = "The microservice backend that serves the app"
+authors = ["leventefarkas <levnzz@gmail.com>"]
+readme = "README.md"
+packages = [{include = "car_model_classification"}]
+
+[tool.poetry.dependencies]
+python = "3.10.2"
+matplotlib = "^3.7.0"
+numpy = "^1.24.2"
+torch = "^1.13.1"
+torchvision = "^0.14.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
