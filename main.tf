@@ -1,7 +1,7 @@
 resource "aws_launch_template" "cmc_launch_template" {
-  name_prefix = "cmc"
-  image_id    = "ami-0b64c3b927c62fcbd"
-
+  name_prefix   = "cmc"
+  image_id      = "ami-0b64c3b927c62fcbd"
+  
   instance_requirements {
     memory_mib {
       min = 8192
@@ -11,16 +11,9 @@ resource "aws_launch_template" "cmc_launch_template" {
     }
     instance_generations = ["current"]
   }
+
 }
 
-
-resource "aws_autoscaling_policy" "bat" {
-  name                   = "foobar3-terraform-test"
-  scaling_adjustment     = 4
-  adjustment_type        = "ChangeInCapacity"
-  cooldown               = 300
-  autoscaling_group_name = aws_autoscaling_group.bar.name
-}
 
 resource "aws_autoscaling_group" "cmc_on_demand_asg" {
   availability_zones = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
@@ -35,8 +28,9 @@ resource "aws_autoscaling_group" "cmc_on_demand_asg" {
     }
 
     launch_template {
-      id      = aws_launch_template.cmc_launch_template.id
-      version = "$Latest"
+      launch_template_specification {
+        launch_template_id = aws_launch_template.cmc_launch_template.id
+      }
     }
   }
 }
