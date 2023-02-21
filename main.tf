@@ -1,6 +1,6 @@
 resource "aws_launch_template" "cmc_launch_template" {
   name_prefix = "cmc"
-  image_id    = data.aws_ami.abs.id
+  image_id    = "ami-0b64c3b927c62fcbd"
 
   instance_requirements {
     memory_mib {
