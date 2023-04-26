@@ -34,27 +34,6 @@ resource "aws_iam_role" "sf_exec_role" {
   assume_role_policy = data.aws_iam_policy_document.sf_assume_role.json
 }
 
-resource "aws_iam_policy" "lambda_invoke" {
-  name   = "${var.project_name}-lambda-invoke"
-  policy = data.aws_iam_policy_document.lambda_invoke.json
-}
-
-data "aws_iam_policy_document" "lambda_invoke" {
-  statement {
-    actions = [
-      "lambda:InvokeFunction"
-    ]
-    resources = [
-      aws_lambda_function.lambda_function.arn,
-    ]
-  }
-}
-
-resource "aws_iam_role_policy_attachment" "lambda_invoke" {
-  role       = aws_iam_role.sf_exec_role.name
-  policy_arn = aws_iam_policy.lambda_invoke.arn
-}
-
 // policy to invoke sagemaker training job, creating endpoints etc.
 resource "aws_iam_policy" "sagemaker_policy" {
   name   = "${var.project_name}-sagemaker"
@@ -160,10 +139,10 @@ resource "aws_iam_policy" "sagemaker_s3_policy" {
                       "s3:*"
                   ],
                   "Resource": [
-                   "${aws_s3_bucket.bucket_training_data.arn}",
-                   "${aws_s3_bucket.bucket_output_models.arn}",
-                   "${aws_s3_bucket.bucket_training_data.arn}/*",
-                   "${aws_s3_bucket.bucket_output_models.arn}/*"
+                   "${aws_s3_bucket.cmc_train_data_bucket.arn}",
+                   "${aws_s3_bucket.cmc_output_models_bucket.arn}",
+                   "${aws_s3_bucket.cmc_train_data_bucket.arn}/*",
+                   "${aws_s3_bucket.cmc_output_models_bucket.arn}/*"
                   ]
               }
           ]
@@ -203,7 +182,7 @@ resource "aws_s3_bucket" "cmc_train_data_bucket" {
 }
 
 resource "aws_s3_bucket_acl" "cmc_train_data_bucket_acl" {
-  bucket = aws_s3_bucket.bucket_training_data.id
+  bucket = aws_s3_bucket.cmc_train_data_bucket.id
   acl    = "private"
 }
 
@@ -212,7 +191,7 @@ resource "aws_s3_bucket" "cmc_output_models_bucket" {
 }
 
 resource "aws_s3_bucket_acl" "cmc_output_models_bucket_acl" {
-  bucket = aws_s3_bucket.bucket_output_models.id
+  bucket = aws_s3_bucket.cmc_output_models_bucket.id
   acl    = "private"
 }
 

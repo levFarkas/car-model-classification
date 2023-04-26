@@ -1,4 +1,4 @@
-variable "region" {
+variable "aws_region" {
   type = string
 }
 
@@ -7,8 +7,7 @@ variable "environment" {
 }
 
 variable "project_name" {
-  type    = string
-  default = "car-modelling"
+  type = string
 }
 
 variable "runtime" {
